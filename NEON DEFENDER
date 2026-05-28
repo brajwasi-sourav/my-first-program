@@ -1,1 +1,677 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A.E.G.I.S // Quantum Cyber-Deck</title>
+    <!-- Tailwind CSS for modern layouts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for futuristic typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background-color: #030712;
+            background-image: 
+                radial-gradient(at 50% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(244, 63, 94, 0.08) 0px, transparent 50%),
+                linear-gradient(rgba(18, 24, 38, 0.4) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(18, 24, 38, 0.4) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
+            overflow-x: hidden;
+        }
+
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Neon glow effects */
+        .neon-border-cyan {
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.15), inset 0 0 15px rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.4);
+        }
+
+        .neon-border-magenta {
+            box-shadow: 0 0 15px rgba(244, 63, 94, 0.15), inset 0 0 15px rgba(244, 63, 94, 0.1);
+            border: 1px solid rgba(244, 63, 94, 0.4);
+        }
+
+        .neon-text-cyan {
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.8), 0 0 20px rgba(6, 182, 212, 0.3);
+        }
+
+        .neon-text-magenta {
+            text-shadow: 0 0 10px rgba(244, 63, 94, 0.8), 0 0 20px rgba(244, 63, 94, 0.3);
+        }
+
+        /* Scanline scan animation overlay */
+        .scanlines {
+            position: relative;
+        }
+        .scanlines::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 20;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* Glitch animation utility */
+        @keyframes cyber-glitch {
+            0% { clip-path: inset(40% 0 61% 0); }
+            20% { clip-path: inset(92% 0 1% 0); }
+            40% { clip-path: inset(5% 0 85% 0); }
+            60% { clip-path: inset(57% 0 43% 0); }
+            80% { clip-path: inset(29% 0 71% 0); }
+            100% { clip-path: inset(80% 0 5% 0); }
+        }
+
+        .glitch-hover:hover .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 2px;
+            text-shadow: -1px 0 #ff00c1;
+            top: 0;
+            color: #06b6d4;
+            background: #030712;
+            overflow: hidden;
+            clip: rect(0,900px,0,0); 
+            animation: cyber-glitch 1s infinite linear alternate-reverse;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.8);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #06b6d4;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100 scanlines p-4 md:p-8 flex flex-col justify-between">
+
+    <!-- TOP CONTROL STATUS BAR -->
+    <header class="w-full max-w-6xl mx-auto mb-6 flex flex-col md:flex-row items-center justify-between gap-4 p-4 bg-slate-900/60 backdrop-blur-md rounded-lg neon-border-cyan">
+        <div class="flex items-center gap-3">
+            <div class="w-4 h-4 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#06b6d4]"></div>
+            <div>
+                <h1 class="font-orbitron font-black tracking-widest text-lg md:text-2xl text-cyan-400 neon-text-cyan uppercase">
+                    AEGIS // DECK_01
+                </h1>
+                <p class="text-xs text-slate-400 tracking-wider">SYSTEM OPERATIONAL • HOSTED ON GITHUB PAGES</p>
+            </div>
+        </div>
+        
+        <div class="flex flex-wrap items-center gap-4 text-xs">
+            <div class="px-3 py-1 bg-slate-950 rounded border border-cyan-500/20">
+                <span class="text-slate-500">USER:</span> 
+                <span class="text-cyan-400 font-bold">brajwasi-sourav</span>
+            </div>
+            <div class="px-3 py-1 bg-slate-950 rounded border border-rose-500/20">
+                <span class="text-slate-500">CORE_TEMP:</span> 
+                <span class="text-rose-400 font-bold animate-pulse">42°C</span>
+            </div>
+            <div id="audio-toggle-btn" onclick="toggleAudio()" class="px-3 py-1 bg-cyan-950/40 hover:bg-cyan-900/50 rounded border border-cyan-400/30 cursor-pointer transition-all duration-200 flex items-center gap-2">
+                <span id="audio-icon">🔇</span> <span class="text-cyan-400 font-bold">AUDIO OFF</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN INTERACTIVE HUB -->
+    <main class="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch flex-grow">
+        
+        <!-- SIDE PANEL: DIAGNOSTICS & TELEMETRY -->
+        <section class="lg:col-span-1 flex flex-col gap-6">
+            <!-- System Stats Card -->
+            <div class="bg-slate-950/80 backdrop-blur-md p-6 rounded-xl neon-border-cyan flex-grow flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between border-b border-cyan-500/20 pb-3 mb-4">
+                        <h2 class="font-orbitron text-md text-cyan-400 tracking-wider uppercase font-bold">Quantum Telemetry</h2>
+                        <span class="text-xs text-cyan-500/75 animate-ping">●</span>
+                    </div>
+                    
+                    <div class="space-y-4 text-sm">
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-400 mb-1">
+                                <span>NEURAL SYNAPSE LOAD</span>
+                                <span class="text-cyan-400">89.4%</span>
+                            </div>
+                            <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-cyan-500/10">
+                                <div class="bg-cyan-500 h-full animate-[pulse_2s_infinite]" style="width: 89%;"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-400 mb-1">
+                                <span>QUANTUM ENCRYPTION</span>
+                                <span class="text-emerald-400">SECURE</span>
+                            </div>
+                            <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-emerald-500/10">
+                                <div class="bg-emerald-500 h-full" style="width: 100%;"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-400 mb-1">
+                                <span>GITHUB DEPLOY SYNC</span>
+                                <span class="text-indigo-400">ACTIVE</span>
+                            </div>
+                            <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-indigo-500/10">
+                                <div class="bg-indigo-500 h-full animate-[pulse_1.5s_infinite]" style="width: 75%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-cyan-500/20">
+                    <div class="text-xs text-cyan-500/70 mb-2">MATRIX MODULE CONSOLE:</div>
+                    <div class="bg-black/80 p-3 rounded font-mono text-xs text-emerald-400/90 h-28 overflow-y-auto space-y-1" id="terminal-log">
+                        <div>&gt; System terminal initialized...</div>
+                        <div>&gt; Secure handshakes verified...</div>
+                        <div>&gt; Repository path established...</div>
+                        <div>&gt; Ready to engage tactical shield.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Developer Brief Card -->
+            <div class="bg-slate-950/80 backdrop-blur-md p-6 rounded-xl border border-rose-500/20 neon-border-magenta">
+                <h3 class="font-orbitron text-xs text-rose-400 uppercase tracking-widest font-black mb-2">PROJECT DESIGN ARCHITECT</h3>
+                <div class="flex items-center gap-4">
+                    <div class="relative w-12 h-12 rounded-lg bg-gradient-to-tr from-rose-600 to-cyan-500 p-[1px] shadow-[0_0_15px_rgba(244,63,94,0.3)]">
+                        <div class="w-full h-full bg-slate-950 rounded-lg flex items-center justify-center font-orbitron font-black text-slate-200">
+                            BS
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-md font-bold text-slate-200">brajwasi-sourav</h4>
+                        <p class="text-xs text-slate-400">Chief Quantum Engineer</p>
+                        <a href="https://github.com/brajwasi-sourav" target="_blank" class="text-[10px] text-cyan-400 hover:underline">VISIT GITHUB PROFILE →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CENTER PANEL: THE NEON ARCADE CORE -->
+        <section class="lg:col-span-2 flex flex-col bg-slate-950/80 backdrop-blur-md rounded-xl neon-border-cyan overflow-hidden">
+            <div class="p-4 border-b border-cyan-500/20 flex justify-between items-center bg-slate-900/40">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+                    <h2 class="font-orbitron text-sm font-black text-rose-400 tracking-wider uppercase">
+                        ARCADE: NEON DEFENDER v2.5
+                    </h2>
+                </div>
+                <div class="text-xs text-cyan-400 font-bold bg-cyan-950/80 px-3 py-1 rounded border border-cyan-500/30">
+                    HI-SCORE: <span id="high-score">0000</span>
+                </div>
+            </div>
+
+            <!-- GAME INTERFACE CONTAINER -->
+            <div class="relative flex-grow flex flex-col justify-center items-center p-4 bg-slate-950/40" style="min-height: 400px;">
+                <!-- Canvas Game Area -->
+                <canvas id="gameCanvas" class="w-full max-w-full rounded bg-slate-950/90 border border-slate-800 shadow-inner cursor-none touch-none"></canvas>
+
+                <!-- Initial Start Overlay / Game Over Overlay -->
+                <div id="game-overlay" class="absolute inset-0 bg-slate-950/95 flex flex-col justify-center items-center text-center p-6 z-10">
+                    <div class="space-y-6 max-w-sm">
+                        <h3 id="overlay-title" class="font-orbitron text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-500 tracking-widest uppercase animate-pulse">
+                            NEON DEFENDER
+                        </h3>
+                        <p id="overlay-desc" class="text-xs text-slate-400 leading-relaxed">
+                            A highly-synchronized cyber-combat arena. Drag or move your touch/mouse to control the tactical ship. Automatically fires plasma rounds!
+                        </p>
+                        
+                        <div class="p-4 bg-slate-900/80 border border-cyan-500/20 rounded-lg space-y-2 text-xs">
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">CONTROLS:</span>
+                                <span class="text-cyan-400 font-bold">DRAG OR TAPPING</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">OBJECTIVE:</span>
+                                <span class="text-rose-400 font-bold">SURVIVE & ANNIHILATE</span>
+                            </div>
+                        </div>
+
+                        <button onclick="startGame()" class="glitch-hover w-full py-3 bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 rounded font-orbitron font-black text-sm tracking-widest text-slate-100 uppercase transition-all duration-300 shadow-[0_0_20px_rgba(6,182,212,0.4)]">
+                            <span class="glitch-text" data-text="ENGAGE CORE LINK">ENGAGE CORE LINK</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GAME STATS FOOTER BAR -->
+            <div class="grid grid-cols-3 border-t border-cyan-500/20 bg-slate-950 text-center text-xs divide-x divide-cyan-500/10">
+                <div class="py-3">
+                    <div class="text-slate-500 text-[10px]">CURRENT SCORE</div>
+                    <div class="text-cyan-400 font-bold text-lg font-orbitron" id="game-score">0000</div>
+                </div>
+                <div class="py-3">
+                    <div class="text-slate-500 text-[10px]">TACTICAL SHIELD</div>
+                    <div class="text-emerald-400 font-bold text-lg font-orbitron" id="game-shield">100%</div>
+                </div>
+                <div class="py-3">
+                    <div class="text-slate-500 text-[10px]">THREAT LEVEL</div>
+                    <div class="text-rose-400 font-bold text-lg font-orbitron" id="game-level">ALPHA</div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER LICENSE & GITHUB INFO -->
+    <footer class="w-full max-w-6xl mx-auto mt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-slate-500 tracking-widest uppercase border-t border-slate-900 pt-6">
+        <div>
+            © 2026 // brajwasi-sourav • ALL SYSTEMS LICENSED UNDER MIT LICENSE
+        </div>
+        <div class="flex gap-4">
+            <a href="https://github.com/brajwasi-sourav" class="hover:text-cyan-400 transition-colors">GITHUB PAGE</a>
+            <span>•</span>
+            <a href="#" onclick="alert('This is a static React/HTML deploy node')" class="hover:text-cyan-400 transition-colors">SECURITY ENCRYPT</a>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE SCRIPT & GAME ENGINE -->
+    <script>
+        // Custom Audio Synthesizer (Web Audio API)
+        let audioEnabled = false;
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function toggleAudio() {
+            initAudio();
+            audioEnabled = !audioEnabled;
+            const btn = document.getElementById('audio-toggle-btn');
+            const icon = document.getElementById('audio-icon');
+            if (audioEnabled) {
+                icon.innerText = "🔊";
+                btn.querySelector('span:last-child').innerText = "AUDIO ON";
+                btn.classList.add('bg-cyan-500/20');
+                logTerminal("Audio channels initialized securely.");
+                // Play a high-tech power-up sound immediately
+                synthesizeSound(440, "sine", 0.15, 0.1);
+                setTimeout(() => synthesizeSound(880, "triangle", 0.25, 0.1), 100);
+            } else {
+                icon.innerText = "🔇";
+                btn.querySelector('span:last-child').innerText = "AUDIO OFF";
+                btn.classList.remove('bg-cyan-500/20');
+                logTerminal("Audio synthesizers set to standby.");
+            }
+        }
+
+        function synthesizeSound(startFreq, type, duration, volume = 0.2, endFreq = null) {
+            if (!audioEnabled || !audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                osc.type = type;
+                osc.frequency.setValueAtTime(startFreq, audioCtx.currentTime);
+                if (endFreq) {
+                    osc.frequency.exponentialRampToValueAtTime(endFreq, audioCtx.currentTime + duration);
+                }
+
+                gainNode.gain.setValueAtTime(volume, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        // Terminal Log Utility
+        function logTerminal(message) {
+            const container = document.getElementById('terminal-log');
+            const newLog = document.createElement('div');
+            newLog.innerText = `> ${message}`;
+            container.appendChild(newLog);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Canvas Game Engine
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Force canvas sizes according to modern device specs
+        function resizeCanvas() {
+            const width = canvas.parentElement.clientWidth;
+            canvas.width = width;
+            canvas.height = 420;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Game State Variables
+        let isPlaying = false;
+        let score = 0;
+        let highScore = parseInt(localStorage.getItem('cyber_highscore')) || 0;
+        document.getElementById('high-score').innerText = String(highScore).padStart(4, '0');
+        
+        let player = {
+            x: canvas.width / 2,
+            y: canvas.height - 60,
+            width: 32,
+            height: 32,
+            shield: 100,
+            targetX: canvas.width / 2
+        };
+
+        let lasers = [];
+        let enemies = [];
+        let particles = [];
+        let starfield = [];
+        let spawnRate = 1200; // spawn enemy every 1.2s
+        let lastSpawn = 0;
+        let lastLaser = 0;
+        let screenShake = 0;
+
+        // Initialize Cyber Space Background Star Grid
+        function initStars() {
+            starfield = [];
+            for (let i = 0; i < 40; i++) {
+                starfield.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    speed: Math.random() * 2 + 1,
+                    size: Math.random() * 1.5 + 0.5
+                });
+            }
+        }
+        initStars();
+
+        // Event Listeners for Touch/Mouse Interaction (Mobile Optimized)
+        function handleInput(clientX) {
+            const rect = canvas.getBoundingClientRect();
+            const relativeX = clientX - rect.left;
+            // Bound movement within the canvas container
+            player.targetX = Math.max(20, Math.min(canvas.width - 20, relativeX));
+        }
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isPlaying) return;
+            handleInput(e.clientX);
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            if (!isPlaying) return;
+            e.preventDefault(); // Stop mobile screen scrolling during play
+            handleInput(e.touches[0].clientX);
+        }, { passive: false });
+
+        canvas.addEventListener('touchstart', (e) => {
+            initAudio(); // Keep user interactive permission active
+            if (!isPlaying) return;
+            handleInput(e.touches[0].clientX);
+        });
+
+        function startGame() {
+            initAudio();
+            document.getElementById('game-overlay').classList.add('hidden');
+            isPlaying = true;
+            score = 0;
+            player.shield = 100;
+            player.x = canvas.width / 2;
+            player.targetX = canvas.width / 2;
+            lasers = [];
+            enemies = [];
+            particles = [];
+            spawnRate = 1200;
+            
+            document.getElementById('game-score').innerText = '0000';
+            document.getElementById('game-shield').innerText = '100%';
+            document.getElementById('game-shield').className = 'text-emerald-400 font-bold text-lg font-orbitron';
+            document.getElementById('game-level').innerText = 'ALPHA';
+
+            logTerminal("Combat tactical interface ENGAGED.");
+            synthesizeSound(200, "sawtooth", 0.6, 0.2, 800);
+            
+            requestAnimationFrame(gameLoop);
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            synthesizeSound(500, "sawtooth", 0.8, 0.25, 60);
+            
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('cyber_highscore', highScore);
+                document.getElementById('high-score').innerText = String(highScore).padStart(4, '0');
+                logTerminal(`NEW HIGHSCORE RECORDED: ${highScore}`);
+            }
+
+            document.getElementById('overlay-title').innerText = "SYSTEM CRITICAL";
+            document.getElementById('overlay-title').className = "font-orbitron text-4xl font-extrabold text-rose-500 tracking-widest uppercase animate-pulse neon-text-magenta";
+            document.getElementById('overlay-desc').innerText = `Hull breach confirmed. Tactical connection lost at scoring matrix node: ${score}`;
+            document.getElementById('game-overlay').classList.remove('hidden');
+            logTerminal("Ship destroyed. Core link deactivated.");
+        }
+
+        // Particle System Creator
+        function spawnParticles(x, y, color, count = 10) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8,
+                    size: Math.random() * 3 + 1,
+                    alpha: 1,
+                    decay: Math.random() * 0.03 + 0.015,
+                    color: color
+                });
+            }
+        }
+
+        // Standard Game Tick
+        function gameLoop(timestamp) {
+            if (!isPlaying) return;
+
+            // Handle Screen Shake
+            if (screenShake > 0) {
+                screenShake -= 0.5;
+            }
+
+            ctx.save();
+            if (screenShake > 0) {
+                const dx = (Math.random() - 0.5) * screenShake;
+                const dy = (Math.random() - 0.5) * screenShake;
+                ctx.translate(dx, dy);
+            }
+
+            // Clear Scene
+            ctx.fillStyle = '#030712';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Stars background
+            ctx.fillStyle = 'rgba(6, 182, 212, 0.3)';
+            starfield.forEach(star => {
+                ctx.fillRect(star.x, star.y, star.size, star.size);
+                star.y += star.speed;
+                if (star.y > canvas.height) {
+                    star.y = 0;
+                    star.x = Math.random() * canvas.width;
+                }
+            });
+
+            // Smoothly move Player towards touch pointer
+            player.x += (player.targetX - player.x) * 0.2;
+
+            // Auto Laser Shooting Sequence (every 180ms)
+            if (timestamp - lastLaser > 180) {
+                lasers.push({
+                    x: player.x,
+                    y: player.y - 15,
+                    speed: 10
+                });
+                lastLaser = timestamp;
+                synthesizeSound(800, "sine", 0.08, 0.05, 1200);
+            }
+
+            // Generate/Spawn Enemies
+            if (timestamp - lastSpawn > spawnRate) {
+                enemies.push({
+                    x: Math.random() * (canvas.width - 40) + 20,
+                    y: -20,
+                    speed: Math.random() * 2.5 + 1.5,
+                    size: Math.random() * 15 + 15,
+                    hp: 2,
+                    color: Math.random() > 0.4 ? '#f43f5e' : '#a855f7' // Magenta or Purple
+                });
+                lastSpawn = timestamp;
+                
+                // Steadily ramp up difficulty
+                if (spawnRate > 350) spawnRate -= 15;
+            }
+
+            // Draw lasers
+            ctx.fillStyle = '#06b6d4';
+            lasers.forEach((laser, index) => {
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#06b6d4';
+                ctx.fillRect(laser.x - 2, laser.y, 4, 12);
+                laser.y -= laser.speed;
+
+                // Cleanup out of bounds lasers
+                if (laser.y < 0) {
+                    lasers.splice(index, 1);
+                }
+            });
+            ctx.shadowBlur = 0; // Reset shadow
+
+            // Draw and Update Enemies
+            enemies.forEach((enemy, eIdx) => {
+                ctx.strokeStyle = enemy.color;
+                ctx.lineWidth = 2;
+                ctx.fillStyle = 'rgba(15, 23, 42, 0.6)';
+                
+                ctx.beginPath();
+                // Draw a sleek holographic hexagon for enemies
+                const sides = 6;
+                const angle = (Math.PI * 2) / sides;
+                for (let i = 0; i < sides; i++) {
+                    const x = enemy.x + enemy.size * Math.cos(i * angle + timestamp/1000);
+                    const y = enemy.y + enemy.size * Math.sin(i * angle + timestamp/1000);
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.stroke();
+                ctx.fill();
+
+                enemy.y += enemy.speed;
+
+                // Hit detection with Player Lasers
+                lasers.forEach((laser, lIdx) => {
+                    const dist = Math.hypot(laser.x - enemy.x, laser.y - enemy.y);
+                    if (dist < enemy.size) {
+                        lasers.splice(lIdx, 1);
+                        enemy.hp--;
+                        spawnParticles(enemy.x, enemy.y, enemy.color, 4);
+                        synthesizeSound(400, "triangle", 0.05, 0.08, 150);
+
+                        if (enemy.hp <= 0) {
+                            spawnParticles(enemy.x, enemy.y, enemy.color, 12);
+                            synthesizeSound(180, "sawtooth", 0.2, 0.15, 40);
+                            enemies.splice(eIdx, 1);
+                            score += 10;
+                            document.getElementById('game-score').innerText = String(score).padStart(4, '0');
+                            
+                            // Adjust dynamic game threat levels
+                            if (score === 100) {
+                                document.getElementById('game-level').innerText = 'BETA';
+                                logTerminal("Threat level critical: ALPHA -> BETA.");
+                            } else if (score === 300) {
+                                document.getElementById('game-level').innerText = 'OMEGA';
+                                logTerminal("Threat level critical: BETA -> OMEGA.");
+                            }
+                        }
+                    }
+                });
+
+                // Collision detection with player ship
+                const shipDist = Math.hypot(player.x - enemy.x, player.y - enemy.y);
+                if (shipDist < enemy.size + 15) {
+                    enemies.splice(eIdx, 1);
+                    player.shield -= 25;
+                    screenShake = 12;
+                    spawnParticles(player.x, player.y, '#f43f5e', 15);
+                    synthesizeSound(100, "sawtooth", 0.4, 0.25, 20);
+                    
+                    const shieldEl = document.getElementById('game-shield');
+                    shieldEl.innerText = player.shield + '%';
+                    
+                    if (player.shield <= 50 && player.shield > 0) {
+                        shieldEl.className = 'text-amber-400 font-bold text-lg font-orbitron animate-pulse';
+                        logTerminal("Warning: Deflector shield efficiency below 50%.");
+                    } else if (player.shield <= 0) {
+                        gameOver();
+                    }
+                }
+
+                // Clean up missed enemies
+                if (enemy.y > canvas.height + 30) {
+                    enemies.splice(eIdx, 1);
+                }
+            });
+
+            // Draw player ship (Tactical Triangle)
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = '#06b6d4';
+            ctx.fillStyle = '#06b6d4';
+            ctx.beginPath();
+            ctx.moveTo(player.x, player.y - 16);
+            ctx.lineTo(player.x - 16, player.y + 16);
+            ctx.lineTo(player.x + 16, player.y + 16);
+            ctx.closePath();
+            ctx.fill();
+
+            // Ship neon accent lines
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(player.x - 12, player.y + 10);
+            ctx.lineTo(player.x + 12, player.y + 10);
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            // Update explosion particles
+            particles.forEach((part, index) => {
+                part.x += part.vx;
+                part.y += part.vy;
+                part.alpha -= part.decay;
+                
+                ctx.fillStyle = part.color;
+                ctx.globalAlpha = part.alpha;
+                ctx.fillRect(part.x, part.y, part.size, part.size);
+                ctx.globalAlpha = 1.0;
+
+                if (part.alpha <= 0) {
+                    particles.splice(index, 1);
+                }
+            });
+
+            ctx.restore();
+            requestAnimationFrame(gameLoop);
+        }
+    </script>
+</body>
+</html>
+
+```
 
